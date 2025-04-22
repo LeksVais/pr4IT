@@ -1,24 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Элементы DOM
     const eventsContainer = document.getElementById('events-container');
     const addEventBtn = document.getElementById('add-event-btn');
     const categoryFilter = document.getElementById('category-filter');
     const dateSort = document.getElementById('date-sort');
     
-    // Загрузка событий из localStorage
     let events = JSON.parse(localStorage.getItem('events')) || [];
     
-    // Отображение событий
     function renderEvents() {
         eventsContainer.innerHTML = '';
         
-        // Фильтрация по категории
         let filteredEvents = [...events];
         if (categoryFilter.value !== 'all') {
             filteredEvents = filteredEvents.filter(event => event.category === categoryFilter.value);
         }
         
-        // Сортировка по дате
         filteredEvents.sort((a, b) => {
             const dateA = new Date(a.date);
             const dateB = new Date(b.date);
@@ -29,14 +24,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 return dateB - dateA;
             }
         });
+
+        const tabs = document.querySelectorAll('.category-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Удаляем активный класс у всех вкладок
+                tabs.forEach(t => t.classList.remove('active'));
+                // Добавляем активный класс текущей вкладке
+                this.classList.add('active');
+                
+                // Скрываем все контейнеры событий
+                document.querySelectorAll('.category-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Показываем выбранный контейнер
+                const category = this.dataset.category;
+                document.getElementById(`${category}-events`).classList.add('active');
+            });
+        });
         
-        // Создание карточек событий
         filteredEvents.forEach(event => {
             const eventCard = document.createElement('div');
             eventCard.className = 'event-card';
             eventCard.dataset.id = event.id;
             
-            // Форматирование даты
             const eventDate = new Date(event.date);
             const formattedDate = eventDate.toLocaleDateString('ru-RU', {
                 day: 'numeric',
@@ -44,14 +56,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 year: 'numeric'
             });
             
-            // Определение класса категории
             let categoryClass = '';
             let categoryName = '';
             
             switch(event.category) {
                 case 'personal':
                     categoryClass = 'personal';
-                    categoryName = 'Дела';
+                    categoryName = 'Личное';
                     break;
                 case 'work':
                     categoryClass = 'work';
@@ -73,7 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
             eventsContainer.appendChild(eventCard);
         });
         
-        // Добавление обработчиков событий для карточек
         document.querySelectorAll('.event-card').forEach(card => {
             card.addEventListener('click', function() {
                 const eventId = this.dataset.id;
@@ -81,11 +91,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
     
-    // Инициализация приложения
+    
     renderEvents();
     
-    // Обработчики событий
     addEventBtn.addEventListener('click', function() {
         window.location.href = 'add-event.html';
     });
@@ -93,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function() {
     categoryFilter.addEventListener('change', renderEvents);
     dateSort.addEventListener('change', renderEvents);
     
-    // Функция для обновления событий из других вкладок
     window.addEventListener('storage', function(e) {
         if (e.key === 'events') {
             events = JSON.parse(e.newValue) || [];

@@ -151,6 +151,35 @@ select {
     color: #7b1fa2;
 }
 
+.category-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+.category-tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    margin-right: 5px;
+    background: #f1f1f1;
+    transition: all 0.3s ease;
+}
+.category-tab.active {
+    background: #fff;
+    border-color: #ddd;
+    border-bottom: 1px solid #fff;
+    margin-bottom: -1px;
+    font-weight: bold;
+}
+.category-content {
+    display: none;
+}
+.category-content.active {
+    display: block;
+}
+
 .event-description {
     color: #616161;
     font-size: 0.9rem;
@@ -197,7 +226,6 @@ select {
     margin-top: 30px;
 }
 
-/* Анимации */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
