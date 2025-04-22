@@ -24,25 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return dateB - dateA;
             }
         });
-
-        const tabs = document.querySelectorAll('.category-tab');
-        tabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Удаляем активный класс у всех вкладок
-                tabs.forEach(t => t.classList.remove('active'));
-                // Добавляем активный класс текущей вкладке
-                this.classList.add('active');
-                
-                // Скрываем все контейнеры событий
-                document.querySelectorAll('.category-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                
-                // Показываем выбранный контейнер
-                const category = this.dataset.category;
-                document.getElementById(`${category}-events`).classList.add('active');
-            });
-        });
         
         filteredEvents.forEach(event => {
             const eventCard = document.createElement('div');
@@ -91,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-
     
     
     renderEvents();
